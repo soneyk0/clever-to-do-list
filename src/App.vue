@@ -16,7 +16,7 @@
   height: 100%;
   width: 100%;
   box-sizing: border-box;
-  background-color: #f3f3f3;
+  background-color: var(--bg-color);
   padding: 25px;
 }
 

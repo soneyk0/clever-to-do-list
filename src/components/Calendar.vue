@@ -27,6 +27,7 @@ const generateCalendar = () => computed(() => {
         newDate.getMonth() === currentDate.getMonth() &&
         newDate.getFullYear() === currentDate.getFullYear();
 
+
       const monthIndex = monthNames.indexOf(currentMonthName.value);
       const formattedMonth = (monthIndex + 1).toString().padStart(2, '0');
       const formattedDay = newDate.getDate().toString().padStart(2, '0');
@@ -37,10 +38,9 @@ const generateCalendar = () => computed(() => {
         month: currentMonthName,
         year: newDate.getFullYear(),
         isToday: isToday,
-        formattedDate: `${newDate.getFullYear()}-${formattedMonth}-${formattedDay}`
+        formattedDate: `${newDate.getFullYear()}-${formattedMonth}-${formattedDay}`,
       })
     }
-  console.log(days)
     return days
   },
 )
@@ -69,7 +69,7 @@ onMounted(() => {
               :key="date.date"
               class="calendar_item"
               @click="() => selectDate(date)"
-              :class="{'today': date?.isToday}">
+              :class="{'today': date?.isToday, 'selected': date.formattedDate === selectedDate}">
         <span class="calendar_day-of-week">{{ date.dayOfWeek }}</span>
         <span class="calendar_date">{{ date.date }}</span>
         <span class="calendar_month">{{ date.month }}</span>
@@ -135,7 +135,7 @@ onMounted(() => {
   cursor: pointer;
 }
 
-.calendar_item:active {
+.calendar_item:active  {
   color: var(--white);
   background-color: var(--secondary);
 }
@@ -146,9 +146,21 @@ onMounted(() => {
   border: none;
 }
 
+.calendar_item.selected{
+  color: var(--white);
+  background-color: var(--secondary);
+}
+
 .calendar_item.today {
   background-color: lightgreen;
   border-color: green;
+  font-weight: bold;
+  color:var(--white)
+}
+
+.calendar_item.selected {
+  background-color: orange;
+  border-color: orange;
   font-weight: bold;
 }
 </style>
