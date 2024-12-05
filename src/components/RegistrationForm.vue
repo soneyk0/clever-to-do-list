@@ -18,7 +18,7 @@ function register(){
   }
   createUserWithEmailAndPassword(getAuth(),email.value,password.value)
     .then(()=>{
-        router.push('/')
+        router.push('/clever-to-do-list')
     }).catch((error)=>{
     console.log(error.message)
     if (error.code === 'auth/invalid-email') {
@@ -72,7 +72,7 @@ function register(){
       </div>
       <p v-if="errorMessage" class="auth-form_error">{{ errorMessage }}</p>
       <button class="register-form_button" @click="register">Sign up</button>
-      <p class="register-form_infoText">Already have an account? <router-link to="/login" class="register-form_link">Sing in</router-link></p>
+      <p class="register-form_infoText">Already have an account? <router-link to="/clever-to-do-list/login" class="register-form_link">Sing in</router-link></p>
     </div>
   </div>
 </template>

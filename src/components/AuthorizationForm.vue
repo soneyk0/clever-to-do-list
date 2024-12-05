@@ -14,7 +14,7 @@ function signIn() {
   const auth = getAuth()
   signInWithEmailAndPassword(auth, email.value, password.value)
     .then(() => {
-      router.push('/')
+      router.push('/clever-to-do-list')
     }).catch((error) => {
     if (error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
       toast.error('Incorrect email or password.', {
@@ -51,7 +51,7 @@ function signIn() {
       <p v-if="errorMessage" class="auth-form_error">{{ errorMessage }}</p>
       <button class="auth-form_button" @click="signIn">Sign in</button>
       <p class="auth-form_infoText">Don't have an account?
-        <router-link to="/signup" class="auth-form_link">Sing up</router-link>
+        <router-link to="/clever-to-do-list/signup" class="auth-form_link">Sing up</router-link>
       </p>
     </div>
   </div>

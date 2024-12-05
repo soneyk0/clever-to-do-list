@@ -51,7 +51,7 @@ onMounted(() => {
         }
       })
     } else {
-      router.push('/login')
+      router.push('/clever-to-do-list/login')
     }
   })
 })
@@ -134,7 +134,7 @@ const handleNextPage = () => {
       </button>
     </div>
     <div>
-      <button class="display_add-task-button" @click="router.push('/create-task')">Add a New Task</button>
+      <button class="display_add-task-button" @click="router.push('/clever-to-do-list/create-task')">Add a New Task</button>
     </div>
   </div>
 </template>

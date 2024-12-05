@@ -29,7 +29,7 @@ const routes = [
       requiresAuth :true
     }
   },
-  { path: '/signup', component: RegistrationForm },
+  { path: '/clever-to-do-list/signup', component: RegistrationForm },
 ]
 
 

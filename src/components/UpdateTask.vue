@@ -53,7 +53,7 @@ const createTask = async () => {
         done: task.done,
         email: user.email,
       })
-      router.push('/')
+      router.push('/clever-to-do-list')
     } catch (error) {
     }
   }
