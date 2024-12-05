@@ -1,0 +1,14 @@
+// {
+//    "env": {
+//        "node": true
+//    },
+//    "extends": [
+//        "eslint:recommended",
+//        "plugin:vue/vue3-recommended",
+//        "plugin:prettier/recommended"
+//    ],
+//    "rules": {
+//        "prettier/prettier": "error",
+//        "vue/max-attributes-per-line": ["error", { "singleline": 3, "multiline": 1 }]
+//    }
+//}
