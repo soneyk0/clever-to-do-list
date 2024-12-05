@@ -7,7 +7,7 @@ import HomePage from '../components/HomePage.vue'
 
 const routes = [
   {
-    path: '/',
+    path: '/clever-to-do-list',
     component: HomePage,
     name:'homePage',
     meta:{
@@ -15,14 +15,14 @@ const routes = [
     }
   },
   {
-    path: '/create-task',
+    path: 'clever-to-do-list/create-task',
     component: UpdateTask,
   },
   {
-    path: '/edit-task/:id',
+    path: 'clever-to-do-list/edit-task/:id',
     component: UpdateTask,
   },
-  { path: '/login',
+  { path: 'clever-to-do-list/login',
     component: Authorization,
     name:'login',
     meta:{
