@@ -13,7 +13,7 @@ const errorMessage=ref()
 
 function register(){
   if (password.value !== confirmPassword.value) {
-    errorMessage.value = 'Passwords miss match'; // Устанавливаем сообщение об ошибке
+    errorMessage.value = 'Passwords miss match';
     return;
   }
   createUserWithEmailAndPassword(getAuth(),email.value,password.value)

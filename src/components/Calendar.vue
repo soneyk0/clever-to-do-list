@@ -49,8 +49,8 @@ const calendarDays = generateCalendar()
 
 
 const selectDate = (date) => {
-  selectedDate.value = date.formattedDate // Форматируем дату
-  emit('select-date', selectedDate.value) // Отправляем выбранную дату родителю
+  selectedDate.value = date.formattedDate
+  emit('select-date', selectedDate.value)
 }
 
 onMounted(() => {
@@ -147,8 +147,8 @@ onMounted(() => {
 }
 
 .calendar_item.today {
-  background-color: lightgreen; /* Цвет для текущего дня */
-  border-color: green; /* Цвет границы для выделенного дня */
+  background-color: lightgreen;
+  border-color: green;
   font-weight: bold;
 }
 </style>
