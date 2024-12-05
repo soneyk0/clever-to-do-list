@@ -78,16 +78,19 @@ function register(){
 </template>
 
 <style scoped>
+.container{
+  padding: 20px 30px;
+}
 
 h1 {
   text-align: center;
   font-size: 32px;
   margin-bottom: 50px;
-  color: #333;
+  color: var(--black);
 }
 
 .auth-form_error{
-  color:darkred;
+  color:var(--red);
   font-weight: bold;
 }
 
@@ -99,7 +102,7 @@ h1 {
   font-size: 16px;
   margin-bottom: 5px;
   font-weight: bold;
-  color: #333;
+  color: var(--black);
 }
 
 .register-form_input {
@@ -113,8 +116,8 @@ h1 {
 }
 
 .register-form_input:focus {
-  border: 2px solid lightsalmon;
-  outline: lightsalmon;
+  border: 2px solid var(--primary);
+  outline: var(--primary);
 
 }
 
@@ -126,8 +129,8 @@ h1 {
   margin-right: auto;
   bottom: 50px;
   width: 90%;
-  background: lightsalmon;
-  color: #fff;
+  background: var(--primary);
+  color: var(--white);
   font-size: 20px;
   border: none;
   border-radius: 25px;
@@ -137,21 +140,21 @@ h1 {
 }
 
 .register-form_button:hover {
-  background-color: darkorange;
+  background-color: var(--secondary);
 }
 
 .register-form_infoText {
   text-align: center;
   margin-top: 50px;
-  color: #333;
+  color: var(--black);
 }
 
 .register-form_link{
-  color: lightsalmon;
+  color: var(--primary);
   text-decoration: none;
 }
 .register-form_link:hover {
-  color: darkorange;
+  color: var(--secondary);
   text-decoration: underline;
 }
 </style>

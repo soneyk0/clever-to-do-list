@@ -40,7 +40,7 @@ const getCurrentTask = async () => {
 
 const updateTask = async () => {
   await updateDoc(doc(db, 'todos', taskId), task)
-  router.push('/')
+  router.push('/clever-to-do-list')
 }
 
 const createTask = async () => {
@@ -73,39 +73,45 @@ const submit = () => {
 }
 
 const previousPage = () => {
-  router.push('/')
+  router.push('/clever-to-do-list')
 }
 
 </script>
 
 <template>
-  <div class="task-form_header">
-    <img src="../assets/back.svg" alt="Back" @click="previousPage" class="back-page_button"/>
-    <h1>{{ taskId ? 'Edit' : 'Create' }} task</h1>
-  </div>
-  <div class="task-form_title">
-    <label for="title" class="task-form_name-of-field">Title:</label>
-    <input id="title" type="text" v-model="task.title" placeholder="Enter a title" class="task-form_input" />
-    <p v-if="errorMessage" class="task-form_error">{{ errorMessage }}</p>
-  </div>
+  <div class="container">
+    <div class="task-form_header">
+      <img src="../assets/back.svg" alt="Back" @click="previousPage" class="back-page_button"/>
+      <h1>{{ taskId ? 'Edit' : 'Create' }} task</h1>
+    </div>
+    <div class="task-form_title">
+      <label for="title" class="task-form_name-of-field">Title:</label>
+      <input id="title" type="text" v-model="task.title" placeholder="Enter a title" class="task-form_input" />
+      <p v-if="errorMessage" class="task-form_error">{{ errorMessage }}</p>
+    </div>
 
-  <div class="task-form_description">
-    <label for="description" class="task-form_name-of-field">Description:</label>
-    <textarea id="description" v-model="task.description" placeholder="Description of task"
-              class="task-form_textarea"></textarea>
+    <div class="task-form_description">
+      <label for="description" class="task-form_name-of-field">Description:</label>
+      <textarea id="description" v-model="task.description" placeholder="Description of task"
+                class="task-form_textarea"></textarea>
+    </div>
+    <div class="task-form_calendar">
+      <label for="date" class="task-form_name-of-field">Date:</label>
+      <input id="date" type="date" v-model="task.date" class="task-form_date" />
+    </div>
+    <button class="task-form_button" @click="submit">{{ taskId ? 'Save' : 'Add task' }}</button>
   </div>
-  <div class="task-form_calendar">
-    <label for="date" class="task-form_name-of-field">Date:</label>
-    <input id="date" type="date" v-model="task.date" class="task-form_date" />
-  </div>
-  <button class="task-form_button" @click="submit">{{ taskId ? 'Save' : 'Add task' }}</button>
 
 </template>
 
 <style scoped>
 
+.container {
+  padding: 20px 30px;
+}
+
 .task-form_error{
-  color:darkred;
+  color:var(--red);
   font-weight: bold;
 }
 
@@ -124,7 +130,7 @@ const previousPage = () => {
 h1 {
   text-align: center;
   font-size: 32px;
-  color: #333;
+  color: var(--black);
 }
 
 .task-form_title,
@@ -133,7 +139,7 @@ h1 {
   font-size: 16px;
   margin-bottom: 20px;
   font-weight: bold;
-  color: #333;
+  color: var(--black);
 }
 
 .task-form_input,
@@ -152,8 +158,8 @@ h1 {
 .task-form_input:focus,
 .task-form_textarea:focus,
 .task-form_date:focus {
-  border: 2px solid lightsalmon;
-  outline: lightsalmon;
+  border: 2px solid var(--primary);
+  outline: var(--primary);
 
 }
 
@@ -164,8 +170,8 @@ h1 {
   margin-left: auto;
   margin-right: auto;
   width: 90%;
-  background: lightsalmon;
-  color: #fff;
+  background: var(--primary);
+  color: var(--white);
   font-size: 20px;
   border: none;
   border-radius: 25px;
@@ -176,7 +182,7 @@ h1 {
 }
 
 .task-form_button:hover {
-  background-color: darkorange;
+  background-color: var(--secondary);
 }
 
 </style>

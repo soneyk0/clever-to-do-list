@@ -106,7 +106,7 @@ onMounted(() => {
 
 .calendar_year {
   text-align: center;
-  color: #333333;
+  color: var(--black);
   font-weight: bold;
 
 }
@@ -131,18 +131,18 @@ onMounted(() => {
   border: 1px solid darkgrey;
   padding: 5px 10px;
   border-radius: 10px;
-  background-color: #FFFFFF;
+  background-color: var(--white);
   cursor: pointer;
 }
 
 .calendar_item:active {
-  color: #FFFFFF;
-  background-color: darkorange;
+  color: var(--white);
+  background-color: var(--secondary);
 }
 
 .calendar_item:focus {
-  color: #FFFFFF;
-  background-color: darkorange;
+  color: var(--white);
+  background-color: var(--secondary);
   border: none;
 }
 

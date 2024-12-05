@@ -3,7 +3,7 @@
 <template>
   <div class="container_display">
     <div class="display">
-      <router-view/>
+      <router-view />
     </div>
   </div>
 </template>
@@ -17,7 +17,7 @@
   width: 100%;
   box-sizing: border-box;
   background-color: #f3f3f3;
-  padding: 50px;
+  padding: 25px;
 }
 
 .display {
@@ -28,7 +28,6 @@
   height: 100%;
   width: 100%;
   max-width: 762px;
-  padding: 20px 30px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 </style>

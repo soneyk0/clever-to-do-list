@@ -58,13 +58,15 @@ function signIn() {
 </template>
 
 <style scoped>
-
+.container{
+  padding: 20px 30px;
+}
 
 h1 {
   text-align: center;
   font-size: 32px;
   margin-bottom: 50px;
-  color: #333;
+  color: var(--black);
 }
 
 .auth-form_email, .auth-form_password {
@@ -75,7 +77,7 @@ h1 {
   font-size: 16px;
   margin-bottom: 5px;
   font-weight: bold;
-  color: #333;
+  color: var(--black);
 }
 
 .auth-form_input {
@@ -89,13 +91,13 @@ h1 {
 }
 
 .auth-form_input:focus {
-  border: 2px solid lightsalmon;
+  border: 2px solid var(--primary);
   text-decoration: none;
-  outline: lightsalmon;
+  outline: var(--primary);
 }
 
 .auth-form_error{
-  color: darkred;
+  color: var(--red);
   font-weight: bold;
 }
 
@@ -107,8 +109,8 @@ h1 {
   margin-right: auto;
   bottom: 50px;
   width: 90%;
-  background: lightsalmon;
-  color: #fff;
+  background: var(--primary);
+  color: var(--white);
   font-size: 20px;
   border: none;
   border-radius: 25px;
@@ -118,22 +120,22 @@ h1 {
 }
 
 .auth-form_button:hover {
-  background-color: darkorange;
+  background-color: var(--secondary);
 }
 
 .auth-form_infoText {
   text-align: center;
   margin-top: 50px;
-  color: #333;
+  color: var(--black);
 }
 
 .auth-form_link {
-  color: lightsalmon;
+  color: var(--primary);
   text-decoration: none;
 }
 
 .auth-form_link:hover {
-  color: darkorange;
+  color: var(--secondary);
   text-decoration: underline;
 }
 

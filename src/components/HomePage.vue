@@ -99,48 +99,55 @@ const handleNextPage = () => {
 </script>
 
 <template>
-  <h3>Tassker</h3>
-  <Calendar :non-empty-days="nonEmptyDays" @select-date="sortTasks" />
-  <div class="container-home-page">
-    <div class="task-list">
-      <div v-for="(todo, index) in paginatedTodos" :key="todo.id">
-        <div class="task-list__task-item">
-          <label class="task-list__card-of-task">
-            <input type="checkbox"
-                   v-model="todo.done"
-                   class="task-list__checkbox-done"
-                   id="task"
-                   @change="updateTodoStatus(todo.id, todo.done)">
-            <span class="task-list__checkmark"></span>
-            <span>{{ todo.title }}</span>
-          </label>
-          <div class="task-list__options-button">
-            <img src="../assets/delete.svg" alt="Delete" @click="deleteTodo(todo.id)"
-                 class="task-list__delete-button" />
-            <img src="../assets/edit.svg" alt="Edit" @click="router.push(`/edit-task/${todo.id}`)"
-                 class="task-list__edit-button" />
+  <div class="container">
+    <h3>Tassker</h3>
+    <Calendar :non-empty-days="nonEmptyDays" @select-date="sortTasks" />
+    <div class="container-home-page">
+      <div class="task-list">
+        <div v-for="(todo, index) in paginatedTodos" :key="todo.id">
+          <div class="task-list__task-item">
+            <label class="task-list__card-of-task">
+              <input type="checkbox"
+                     v-model="todo.done"
+                     class="task-list__checkbox-done"
+                     id="task"
+                     @change="updateTodoStatus(todo.id, todo.done)">
+              <span class="task-list__checkmark"></span>
+              <span>{{ todo.title }}</span>
+            </label>
+            <div class="task-list__options-button">
+              <img src="../assets/delete.svg" alt="Delete" @click="deleteTodo(todo.id)"
+                   class="task-list__delete-button" />
+              <img src="../assets/edit.svg" alt="Edit" @click="router.push(`/edit-task/${todo.id}`)"
+                   class="task-list__edit-button" />
+            </div>
           </div>
+          <hr v-if="index < todos.length">
         </div>
-        <hr v-if="index < todos.length">
+      </div>
+      <div class="pagination" v-if="totalPages">
+        <button @click="handlePreviousPage" :disabled="currentPage === 1" class="pagination__button">
+          <
+        </button>
+        <span>Page {{ currentPage }} of {{ totalPages }}</span>
+        <button @click="handleNextPage" :disabled="currentPage === totalPages" class="pagination__button">
+          >
+        </button>
+      </div>
+      <div>
+        <button class="display_add-task-button" @click="router.push('/clever-to-do-list/create-task')">Add a New Task
+        </button>
       </div>
     </div>
-    <div class="pagination" v-if="totalPages">
-      <button @click="handlePreviousPage" :disabled="currentPage === 1" class="pagination__button">
-        <
-      </button>
-      <span>Page {{ currentPage }} of {{ totalPages }}</span>
-      <button @click="handleNextPage" :disabled="currentPage === totalPages" class="pagination__button">
-        >
-      </button>
-    </div>
-    <div>
-      <button class="display_add-task-button" @click="router.push('/clever-to-do-list/create-task')">Add a New Task</button>
-    </div>
   </div>
+
 </template>
 
 <style scoped>
 
+.container {
+  padding: 20px 30px;
+}
 
 .task-list {
   display: flex;
@@ -175,15 +182,15 @@ const handleNextPage = () => {
   top: 0;
   width: 20px;
   height: 20px;
-  border: 2px solid lightsalmon;
+  border: 2px solid var(--primary);
   border-radius: 50%;
-  background-color: #fff;
+  background-color: var(--white);
   transition: background-color 0.3s, border-color 0.3s;
 }
 
 .task-list__card-of-task input:checked + .task-list__checkmark {
-  background-color: darkorange;
-  border-color: darkorange;
+  background-color: var(--secondary);
+  border-color: var(--secondary);
 }
 
 .task-list__card-of-task input:checked + .task-list__checkmark::after {
@@ -193,7 +200,7 @@ const handleNextPage = () => {
   top: 0px;
   width: 6px;
   height: 12px;
-  border: solid white;
+  border: solid var(--white);
   border-width: 0 3px 3px 0;
   transform: rotate(40deg);
 }
@@ -222,36 +229,36 @@ const handleNextPage = () => {
   width: 30px;
   padding: 5px;
   border-radius: 50%;
-  border: 1px solid lightsalmon;
-  background: lightsalmon;
-  color: #FFFFFF;
+  border: 1px solid var(--primary);
+  background: var(--primary);
+  color: var(--white);
 }
 
 .pagination__button:hover {
   width: 30px;
   padding: 5px;
   border-radius: 50%;
-  border: 1px solid darkorange;
-  background: darkorange;
-  color: #FFFFFF;
+  border: 1px solid var(--secondary);
+  background: var(--secondary);
+  color: var(--white);
 }
 
 .pagination__button:active {
   width: 30px;
   padding: 5px;
   border-radius: 50%;
-  border: 1px solid darkorange;
-  background: #FFFFFF;
-  color: darkorange;
+  border: 1px solid var(--secondary);
+  background: var(--white);
+  color: var(--secondary);
 }
 
 .pagination__button:disabled {
   width: 30px;
   padding: 5px;
   border-radius: 50%;
-  border: 1px solid #333333;
+  border: 1px solid var(--black);
   background: darkgrey;
-  color: #333333;
+  color: var(--black);
   opacity: 30%;
 }
 
@@ -263,8 +270,8 @@ const handleNextPage = () => {
   margin-left: auto;
   margin-right: auto;
   width: 90%;
-  background: lightsalmon;
-  color: #fff;
+  background: var(--primary);
+  color: var(--white);
   font-size: 20px;
   border: none;
   border-radius: 25px;
@@ -275,6 +282,6 @@ const handleNextPage = () => {
 }
 
 .display_add-task-button:hover {
-  background-color: darkorange;
+  background-color: var(--secondary);
 }
 </style>
