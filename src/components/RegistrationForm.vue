@@ -127,11 +127,11 @@ h1 {
   right: 0;
   margin-left: auto;
   margin-right: auto;
-  bottom: 50px;
+  bottom: 25px;
   width: 90%;
   background: var(--primary);
   color: var(--white);
-  font-size: 20px;
+  font-size: 18px;
   border: none;
   border-radius: 25px;
   padding: 15px;

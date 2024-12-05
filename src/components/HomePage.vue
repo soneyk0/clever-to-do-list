@@ -272,13 +272,13 @@ const handleNextPage = () => {
   width: 90%;
   background: var(--primary);
   color: var(--white);
-  font-size: 20px;
+  font-size: 18px;
   border: none;
   border-radius: 25px;
   padding: 15px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  bottom: 50px;
+  bottom: 25px;
 }
 
 .display_add-task-button:hover {
