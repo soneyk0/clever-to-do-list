@@ -15,14 +15,14 @@ const routes = [
     }
   },
   {
-    path: 'clever-to-do-list/create-task',
+    path: '/clever-to-do-list/create-task',
     component: UpdateTask,
   },
   {
-    path: 'clever-to-do-list/edit-task/:id',
+    path: '/clever-to-do-list/edit-task/:id',
     component: UpdateTask,
   },
-  { path: 'clever-to-do-list/login',
+  { path: '/clever-to-do-list/login',
     component: Authorization,
     name:'login',
     meta:{
