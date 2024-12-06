@@ -13,7 +13,7 @@ function signIn() {
   const auth = getAuth()
   signInWithEmailAndPassword(auth, email.value, password.value)
     .then(() => {
-      router.push('/')
+      router.push('/clever-to-do-list')
     })
     .catch((error) => {
       if (

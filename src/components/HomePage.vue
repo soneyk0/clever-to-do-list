@@ -98,7 +98,7 @@ const handleNextPage = () => {
 const loginOut = () => {
   const auth = getAuth()
   signOut(auth).then(() => {
-    router.push('/login')
+    router.push('/clever-to-do-list/login')
   })
 }
 </script>
@@ -137,7 +137,7 @@ const loginOut = () => {
               <img
                 src="../assets/edit.svg"
                 alt="Edit"
-                @click="router.push(`/edit-task/${todo.id}`)"
+                @click="router.push(`/clever-to-do-list/edit-task/${todo.id}`)"
                 class="task-list__edit-button"
               />
             </div>
@@ -165,7 +165,7 @@ const loginOut = () => {
       <div>
         <button
           class="container__add-task-button"
-          @click="router.push('/create-task')"
+          @click="router.push('/clever-to-do-list/create-task')"
         >
           Add a New Task
         </button>

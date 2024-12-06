@@ -17,10 +17,9 @@ function register() {
   }
   createUserWithEmailAndPassword(getAuth(), email.value, password.value)
     .then(() => {
-      router.push('/')
+      router.push('/clever-to-do-list')
     })
     .catch((error) => {
-      console.log(error.message)
       if (error.code === 'auth/invalid-email') {
         toast.error('Incorrect email.', {
           autoClose: 3000,
@@ -89,7 +88,7 @@ function register() {
       <button class="register-form__button" @click="register">Sign up</button>
       <p class="register-form__infoText">
         Already have an account?
-        <router-link to="/login" class="register-form__link"
+        <router-link to="/clever-to-do-list/login" class="register-form__link"
           >Sing in</router-link
         >
       </p>

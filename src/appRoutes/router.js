@@ -8,25 +8,25 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth'
 
 const routes = [
   {
-    path: '/',
+    path: '/clever-to-do-list/',
     component: HomePage,
     name: 'homePage',
   },
   {
-    path: '/create-task',
+    path: '/clever-to-do-list/create-task',
     component: UpdateTask,
     name: 'updateTask',
   },
   {
-    path: '/edit-task/:id',
+    path: '/clever-to-do-list/edit-task/:id',
     component: UpdateTask,
   },
   {
-    path: '/login',
+    path: '/clever-to-do-list/login',
     component: Authorization,
     name: 'login',
   },
-  { path: '/signup', component: RegistrationForm },
+  { path: '/clever-to-do-list/signup', component: RegistrationForm },
 ]
 
 const router = createRouter({

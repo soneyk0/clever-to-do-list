@@ -4,7 +4,7 @@ import eslintPlugin from 'vite-plugin-eslint'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/',
+  base: '/clever-to-do-list/',
   plugins: [
     vue(),
     eslintPlugin({

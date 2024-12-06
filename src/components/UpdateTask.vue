@@ -38,7 +38,7 @@ const getCurrentTask = async () => {
 
 const updateTask = async () => {
   await updateDoc(doc(db, 'todos', taskId), task)
-  router.push('/')
+  router.push('/clever-to-do-list')
   toast.success('Task was successfully updated.', {
     autoClose: 3000,
     position: 'bottom-left',
@@ -63,7 +63,7 @@ const createTask = async () => {
         type: 'success',
         theme: 'colored',
       })
-      router.push('/')
+      router.push('/clever-to-do-list')
     } catch {
       toast.error('An unexpected error occurred.', {
         autoClose: 3000,
@@ -90,7 +90,7 @@ const submit = () => {
 }
 
 const previousPage = () => {
-  router.push('/')
+  router.push('/clever-to-do-list')
 }
 </script>
 
