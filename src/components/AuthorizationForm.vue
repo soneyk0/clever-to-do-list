@@ -64,7 +64,9 @@ function signIn() {
       <button class="auth-form__button" @click="signIn">Sign in</button>
       <p class="auth-form_infoText">
         Don't have an account?
-        <router-link to="/signup" class="auth-form__link">Sing up</router-link>
+        <router-link to="/clever-to-do-list//signup" class="auth-form__link"
+          >Sing up</router-link
+        >
       </p>
     </div>
   </div>
