@@ -1,43 +1,57 @@
-import { createMemoryHistory, createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 
 import Authorization from '../components/AuthorizationForm.vue'
 import RegistrationForm from '../components/RegistrationForm.vue'
 import UpdateTask from '../components/UpdateTask.vue'
 import HomePage from '../components/HomePage.vue'
+import { getAuth, onAuthStateChanged } from 'firebase/auth'
 
 const routes = [
   {
-    path: '/clever-to-do-list',
+    path: '/',
     component: HomePage,
-    name:'homePage',
-    meta:{
-      requiresAuth :false
-    }
+    name: 'homePage',
   },
   {
-    path: '/clever-to-do-list/create-task',
+    path: '/create-task',
+    component: UpdateTask,
+    name: 'updateTask',
+  },
+  {
+    path: '/edit-task/:id',
     component: UpdateTask,
   },
   {
-    path: '/clever-to-do-list/edit-task/:id',
-    component: UpdateTask,
-  },
-  { path: '/clever-to-do-list/login',
+    path: '/login',
     component: Authorization,
-    name:'login',
-    meta:{
-      requiresAuth :true
-    }
+    name: 'login',
   },
-  { path: '/clever-to-do-list/signup', component: RegistrationForm },
+  { path: '/signup', component: RegistrationForm },
 ]
-
-
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
 })
 
+router.beforeEach(async (to) => {
+  const auth = getAuth()
+  const isAuth = await new Promise((resolve) => {
+    onAuthStateChanged(auth, (user) => {
+      resolve(!!user)
+    })
+  })
+  let canAccess
+  if (to.path !== '/login' && to.path !== '/signup') {
+    canAccess = isAuth
+  } else if (to.path === '/login' || to.path === '/signup') {
+    canAccess = !isAuth
+  } else {
+    canAccess = true
+  }
+  if (!canAccess) {
+    return isAuth ? '/' : '/login'
+  }
+})
 
 export default router

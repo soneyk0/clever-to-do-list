@@ -22,7 +22,7 @@
 
 .display {
   position: relative;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   border: 2px solid lightsalmon;
   border-radius: 15px;
   height: 100%;

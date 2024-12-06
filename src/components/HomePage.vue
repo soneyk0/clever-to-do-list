@@ -1,13 +1,19 @@
 <script setup>
 import router from '../appRoutes/router.js'
-import Calendar from './Calendar.vue'
+import Calendar from './CalendarComponent.vue'
 import { onMounted, ref, computed } from 'vue'
-import { collection, doc, query, updateDoc, where, deleteDoc, onSnapshot } from 'firebase/firestore'
+import {
+  collection,
+  doc,
+  query,
+  updateDoc,
+  where,
+  deleteDoc,
+  onSnapshot,
+} from 'firebase/firestore'
 import { db } from '../main.js'
-import { getAuth, onAuthStateChanged } from 'firebase/auth'
+import { getAuth, signOut } from 'firebase/auth'
 
-const auth = getAuth()
-const user = auth.currentUser
 const todos = ref([])
 const filteredTodos = ref([])
 let nonEmptyDays = {}
@@ -17,41 +23,33 @@ let selectedDate = ''
 const itemsPerPage = 5
 
 onMounted(() => {
-  onAuthStateChanged(auth, (user) => {
-    console.log(777)
-    if (user) {
-      console.log(user)
-      const q = query(collection(db, 'todos'), where('email', '==', user.email))
-
-      onSnapshot(q, (querySnapshot) => {
-        const fbTodos = []
-        const daysWithTasks = {}
-        querySnapshot.forEach((doc) => {
-          if (!daysWithTasks[doc.data().date]) {
-            daysWithTasks[doc.data().date] = {}
-          }
-          if (doc.data().done) {
-            daysWithTasks[doc.data().date].hasCompletedTask = true
-          } else {
-            daysWithTasks[doc.data().date].hasUnCompletedTask = true
-          }
-          fbTodos.push({
-            id: doc.id,
-            title: doc.data().title,
-            description: doc.data().description,
-            done: doc.data().done,
-            date: doc.data().date,
-          })
-        })
-        console.log(nonEmptyDays)
-        todos.value = fbTodos
-        nonEmptyDays = daysWithTasks
-        if (selectedDate) {
-          sortTasks(selectedDate)
-        }
+  const auth = getAuth()
+  const user = auth.currentUser
+  const q = query(collection(db, 'todos'), where('email', '==', user.email))
+  onSnapshot(q, (querySnapshot) => {
+    const fbTodos = []
+    const daysWithTasks = {}
+    querySnapshot.forEach((doc) => {
+      if (!daysWithTasks[doc.data().date]) {
+        daysWithTasks[doc.data().date] = {}
+      }
+      if (doc.data().done) {
+        daysWithTasks[doc.data().date].hasCompletedTask = true
+      } else {
+        daysWithTasks[doc.data().date].hasUnCompletedTask = true
+      }
+      fbTodos.push({
+        id: doc.id,
+        title: doc.data().title,
+        description: doc.data().description,
+        done: doc.data().done,
+        date: doc.data().date,
       })
-    } else {
-      router.push('/clever-to-do-list/login')
+    })
+    todos.value = fbTodos
+    nonEmptyDays = daysWithTasks
+    if (selectedDate) {
+      sortTasks(selectedDate)
     }
   })
 })
@@ -67,7 +65,6 @@ const deleteTodo = async (todo) => {
   await deleteDoc(doc(db, 'todos', todo))
 }
 
-
 const sortTasks = (date) => {
   if (date) {
     selectedDate = date
@@ -82,7 +79,9 @@ const paginatedTodos = computed(() => {
   return filteredTodos.value.slice(start, end)
 })
 
-const totalPages = computed(() => Math.ceil(filteredTodos.value.length / itemsPerPage))
+const totalPages = computed(() =>
+  Math.ceil(filteredTodos.value.length / itemsPerPage),
+)
 
 const handlePreviousPage = () => {
   if (currentPage.value > 1) {
@@ -96,57 +95,110 @@ const handleNextPage = () => {
   }
 }
 
+const loginOut = () => {
+  const auth = getAuth()
+  signOut(auth).then(() => {
+    router.push('/login')
+  })
+}
 </script>
 
 <template>
   <div class="container">
-    <h3>Tassker</h3>
+    <div class="container__header">
+      <h3>Tassker</h3>
+      <button @click="loginOut" class="container__signOut-button">
+        Sign out
+      </button>
+    </div>
     <Calendar :non-empty-days="nonEmptyDays" @select-date="sortTasks" />
-    <div class="container-home-page">
+    <div class="container__home-page">
       <div class="task-list">
         <div v-for="(todo, index) in paginatedTodos" :key="todo.id">
           <div class="task-list__task-item">
             <label class="task-list__card-of-task">
-              <input type="checkbox"
-                     v-model="todo.done"
-                     class="task-list__checkbox-done"
-                     id="task"
-                     @change="updateTodoStatus(todo.id, todo.done)">
+              <input
+                type="checkbox"
+                v-model="todo.done"
+                class="task-list__checkbox-done"
+                id="task"
+                @change="updateTodoStatus(todo.id, todo.done)"
+              />
               <span class="task-list__checkmark"></span>
               <span>{{ todo.title }}</span>
             </label>
             <div class="task-list__options-button">
-              <img src="../assets/delete.svg" alt="Delete" @click="deleteTodo(todo.id)"
-                   class="task-list__delete-button" />
-              <img src="../assets/edit.svg" alt="Edit" @click="router.push(`/edit-task/${todo.id}`)"
-                   class="task-list__edit-button" />
+              <img
+                src="../assets/delete.svg"
+                alt="Delete"
+                @click="deleteTodo(todo.id)"
+                class="task-list__delete-button"
+              />
+              <img
+                src="../assets/edit.svg"
+                alt="Edit"
+                @click="router.push(`/edit-task/${todo.id}`)"
+                class="task-list__edit-button"
+              />
             </div>
           </div>
-          <hr v-if="index < todos.length">
+          <hr v-if="index < todos.length" />
         </div>
       </div>
       <div class="pagination" v-if="totalPages">
-        <button @click="handlePreviousPage" :disabled="currentPage === 1" class="pagination__button">
-          <
+        <button
+          @click="handlePreviousPage"
+          :disabled="currentPage === 1"
+          class="pagination__button"
+        >
+          <img src="../assets/left.svg" alt="Left" />
         </button>
         <span>Page {{ currentPage }} of {{ totalPages }}</span>
-        <button @click="handleNextPage" :disabled="currentPage === totalPages" class="pagination__button">
-          >
+        <button
+          @click="handleNextPage"
+          :disabled="currentPage === totalPages"
+          class="pagination__button"
+        >
+          <img src="../assets/right.svg" alt="Right" />
         </button>
       </div>
       <div>
-        <button class="display_add-task-button" @click="router.push('/clever-to-do-list/create-task')">Add a New Task
+        <button
+          class="container__add-task-button"
+          @click="router.push('/create-task')"
+        >
+          Add a New Task
         </button>
       </div>
     </div>
   </div>
-
 </template>
 
 <style scoped>
-
 .container {
   padding: 20px 30px;
+}
+
+.container__header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+.container__signOut-button {
+  background: var(--primary);
+  color: var(--white);
+  font-size: 16px;
+  border: none;
+  border-radius: 25px;
+  padding: 5px 15px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  bottom: 25px;
+}
+
+.container__signOut-button:hover {
+  background-color: var(--secondary);
 }
 
 .task-list {
@@ -185,7 +237,9 @@ const handleNextPage = () => {
   border: 2px solid var(--primary);
   border-radius: 50%;
   background-color: var(--white);
-  transition: background-color 0.3s, border-color 0.3s;
+  transition:
+    background-color 0.3s,
+    border-color 0.3s;
 }
 
 .task-list__card-of-task input:checked + .task-list__checkmark {
@@ -205,13 +259,19 @@ const handleNextPage = () => {
   transform: rotate(40deg);
 }
 
+img {
+  width: 20px;
+  height: 10px;
+}
+
 .task-list__options-button {
   display: flex;
   flex-direction: row;
-  gap: 20px
+  gap: 20px;
 }
 
-.task-list__delete-button, .task-list__edit-button {
+.task-list__delete-button,
+.task-list__edit-button {
   width: 20px;
   height: 20px;
   cursor: pointer;
@@ -262,8 +322,7 @@ const handleNextPage = () => {
   opacity: 30%;
 }
 
-
-.display_add-task-button {
+.container__add-task-button {
   position: absolute;
   left: 0;
   right: 0;
@@ -281,7 +340,7 @@ const handleNextPage = () => {
   bottom: 25px;
 }
 
-.display_add-task-button:hover {
+.container__add-task-button:hover {
   background-color: var(--secondary);
 }
 </style>

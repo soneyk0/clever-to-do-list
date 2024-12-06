@@ -1,16 +1,15 @@
 <script setup>
-
 import { onMounted, reactive, ref } from 'vue'
 import router from '../appRoutes/router.js'
 import { db } from '../main.js'
 import { collection, addDoc, getDoc, doc, updateDoc } from 'firebase/firestore'
 import { useRoute } from 'vue-router'
 import { getAuth } from 'firebase/auth'
+import { toast } from 'vue3-toastify'
 
 const auth = getAuth()
 const user = auth.currentUser
-const errorMessage=ref('')
-
+const errorMessage = ref('')
 
 const route = useRoute()
 let taskId = ''
@@ -26,7 +25,6 @@ onMounted(async () => {
   if (taskId) {
     await getCurrentTask()
   }
-
 })
 
 const getCurrentTask = async () => {
@@ -40,7 +38,13 @@ const getCurrentTask = async () => {
 
 const updateTask = async () => {
   await updateDoc(doc(db, 'todos', taskId), task)
-  router.push('/clever-to-do-list')
+  router.push('/')
+  toast.success('Task was successfully updated.', {
+    autoClose: 3000,
+    position: 'bottom-left',
+    type: 'success',
+    theme: 'colored',
+  })
 }
 
 const createTask = async () => {
@@ -53,17 +57,30 @@ const createTask = async () => {
         done: task.done,
         email: user.email,
       })
-      router.push('/clever-to-do-list')
-    } catch (error) {
+      toast.success('Task was successfully created.', {
+        autoClose: 3000,
+        position: 'bottom-left',
+        type: 'success',
+        theme: 'colored',
+      })
+      router.push('/')
+    } catch {
+      toast.error('An unexpected error occurred.', {
+        autoClose: 3000,
+        position: 'bottom-left',
+        type: 'error',
+        theme: 'colored',
+      })
     }
   }
 }
 
 const submit = () => {
-  if(task.title.length>20){
-    errorMessage.value="The title is too long. It must be less than 20 characters."
-  }else{
-    errorMessage.value=""
+  if (task.title.length > 20) {
+    errorMessage.value =
+      'The title is too long. It must be less than 20 characters.'
+  } else {
+    errorMessage.value = ''
     if (taskId) {
       updateTask()
     } else {
@@ -73,55 +90,76 @@ const submit = () => {
 }
 
 const previousPage = () => {
-  router.push('/clever-to-do-list')
+  router.push('/')
 }
-
 </script>
 
 <template>
   <div class="container">
-    <div class="task-form_header">
-      <img src="../assets/back.svg" alt="Back" @click="previousPage" class="back-page_button"/>
+    <div class="task-form__header">
+      <img
+        src="../assets/back.svg"
+        alt="Back"
+        @click="previousPage"
+        class="back-page__button"
+      />
       <h1>{{ taskId ? 'Edit' : 'Create' }} task</h1>
     </div>
-    <div class="task-form_title">
-      <label for="title" class="task-form_name-of-field">Title:</label>
-      <input id="title" type="text" v-model="task.title" placeholder="Enter a title" class="task-form_input" />
-      <p v-if="errorMessage" class="task-form_error">{{ errorMessage }}</p>
+    <div class="task-form__title">
+      <label for="title" class="task-form__name-of-field">Title:</label>
+      <input
+        id="title"
+        type="text"
+        v-model="task.title"
+        placeholder="Enter a title"
+        class="task-form__input"
+      />
+      <p v-if="errorMessage" class="task-form__error">{{ errorMessage }}</p>
     </div>
 
-    <div class="task-form_description">
-      <label for="description" class="task-form_name-of-field">Description:</label>
-      <textarea id="description" v-model="task.description" placeholder="Description of task"
-                class="task-form_textarea"></textarea>
+    <div class="task-form__description">
+      <label for="description" class="task-form__name-of-field"
+        >Description:</label
+      >
+      <textarea
+        id="description"
+        v-model="task.description"
+        placeholder="Description of task"
+        class="task-form__textarea"
+      ></textarea>
     </div>
-    <div class="task-form_calendar">
-      <label for="date" class="task-form_name-of-field">Date:</label>
-      <input id="date" type="date" v-model="task.date" class="task-form_date" />
+    <div class="task-form__calendar">
+      <label for="date" class="task-form__name-of-field">Date:</label>
+      <input
+        id="date"
+        type="date"
+        v-model="task.date"
+        class="task-form__date"
+      />
     </div>
-    <button class="task-form_button" @click="submit">{{ taskId ? 'Save' : 'Add task' }}</button>
+    <button class="task-form__button" @click="submit">
+      {{ taskId ? 'Save' : 'Add task' }}
+    </button>
   </div>
-
 </template>
 
 <style scoped>
-
 .container {
   padding: 20px 30px;
 }
 
-.task-form_error{
-  color:var(--red);
+.task-form__error {
+  color: var(--red);
   font-weight: bold;
 }
 
-.task-form_header{
+.task-form__header {
   display: flex;
   gap: 30px;
   align-items: center;
   margin-bottom: 50px;
 }
-.back-page_button{
+.back-page__button {
   width: 30px;
   height: 30px;
   cursor: pointer;
@@ -133,18 +171,18 @@ h1 {
   color: var(--black);
 }
 
-.task-form_title,
-.task-form_description,
-.task-form_calendar {
+.task-form__title,
+.task-form__description,
+.task-form__calendar {
   font-size: 16px;
   margin-bottom: 20px;
   font-weight: bold;
   color: var(--black);
 }
 
-.task-form_input,
-.task-form_textarea,
-.task-form_date {
+.task-form__input,
+.task-form__textarea,
+.task-form__date {
   font-size: 18px;
   border: 1px solid #ccc;
   border-radius: 10px;
@@ -155,15 +193,14 @@ h1 {
   margin-top: 5px;
 }
 
-.task-form_input:focus,
-.task-form_textarea:focus,
-.task-form_date:focus {
+.task-form__input:focus,
+.task-form__textarea:focus,
+.task-form__date:focus {
   border: 2px solid var(--primary);
   outline: var(--primary);
-
 }
 
-.task-form_button {
+.task-form__button {
   position: absolute;
   left: 0;
   right: 0;
@@ -181,8 +218,7 @@ h1 {
   bottom: 50px;
 }
 
-.task-form_button:hover {
+.task-form__button:hover {
   background-color: var(--secondary);
 }
-
 </style>

@@ -1,56 +1,56 @@
 <script setup>
-
 import { ref } from 'vue'
-import { toast } from 'vue3-toastify';
-import 'vue3-toastify/dist/index.css';
-import{getAuth,createUserWithEmailAndPassword} from 'firebase/auth'
+import { toast } from 'vue3-toastify'
+import 'vue3-toastify/dist/index.css'
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth'
 import router from '../appRoutes/router.js'
 
-const email=ref('')
+const email = ref('')
 const password = ref('')
-const confirmPassword=ref('')
-const errorMessage=ref()
+const confirmPassword = ref('')
+const errorMessage = ref()
 
-function register(){
+function register() {
   if (password.value !== confirmPassword.value) {
-    errorMessage.value = 'Passwords miss match';
-    return;
+    errorMessage.value = 'Passwords miss match'
+    return
   }
-  createUserWithEmailAndPassword(getAuth(),email.value,password.value)
-    .then(()=>{
-        router.push('/clever-to-do-list')
-    }).catch((error)=>{
-    console.log(error.message)
-    if (error.code === 'auth/invalid-email') {
-      toast.error('Incorrect email.', {
-        autoClose: 3000,
-        position: 'bottom-left',
-        type: "error",
-        theme: "colored",
-      });
-    } else if (error.code === 'auth/weak-password') {
-      toast.error('Password should be at least 6 characters.', {
-        autoClose: 3000,
-        position: 'bottom-left',
-        type: "error",
-        theme: "colored",
-      });
-    } else if (error.code === 'auth/email-already-in-use') {
-      toast.error('This email is already in use', {
-        autoClose: 3000,
-        position: 'bottom-left',
-        type: "error",
-        theme: "colored",
-      });}
-    else {
-      toast.error('An unexpected error occurred.', {
-        autoClose: 3000,
-        position: 'bottom-left',
-        type: "error",
-        theme: "colored",
-      });
-    }
-  })
+  createUserWithEmailAndPassword(getAuth(), email.value, password.value)
+    .then(() => {
+      router.push('/')
+    })
+    .catch((error) => {
+      console.log(error.message)
+      if (error.code === 'auth/invalid-email') {
+        toast.error('Incorrect email.', {
+          autoClose: 3000,
+          position: 'bottom-left',
+          type: 'error',
+          theme: 'colored',
+        })
+      } else if (error.code === 'auth/weak-password') {
+        toast.error('Password should be at least 6 characters.', {
+          autoClose: 3000,
+          position: 'bottom-left',
+          type: 'error',
+          theme: 'colored',
+        })
+      } else if (error.code === 'auth/email-already-in-use') {
+        toast.error('This email is already in use', {
+          autoClose: 3000,
+          position: 'bottom-left',
+          type: 'error',
+          theme: 'colored',
+        })
+      } else {
+        toast.error('An unexpected error occurred.', {
+          autoClose: 3000,
+          position: 'bottom-left',
+          type: 'error',
+          theme: 'colored',
+        })
+      }
+    })
 }
 </script>
 
@@ -58,27 +58,47 @@ function register(){
   <div class="container">
     <div class="register-form">
       <h1>Sign up</h1>
-      <div class="register-form_email">
-        <p class="register-form_nameOfInput">Email</p>
-        <input type="email" class="register-form_input" placeholder="Enter email" v-model="email">
+      <div class="register-form__email">
+        <p class="register-form__nameOfInput">Email</p>
+        <input
+          type="email"
+          class="register-form__input"
+          placeholder="Enter email"
+          v-model="email"
+        />
       </div>
-      <div class="register-form_password">
-        <p class="register-form_nameOfInput">Password</p>
-        <input type="password" class="register-form_input" placeholder="Enter password" v-model="password">
+      <div class="register-form__password">
+        <p class="register-form__nameOfInput">Password</p>
+        <input
+          type="password"
+          class="register-form__input"
+          placeholder="Enter password"
+          v-model="password"
+        />
       </div>
-      <div class="register-form_password">
-        <p class="register-form_nameOfInput">Confirm password</p>
-        <input type="password" class="register-form_input" placeholder="Enter password" v-model="confirmPassword">
+      <div class="register-form__password">
+        <p class="register-form__nameOfInput">Confirm password</p>
+        <input
+          type="password"
+          class="register-form__input"
+          placeholder="Enter password"
+          v-model="confirmPassword"
+        />
       </div>
-      <p v-if="errorMessage" class="auth-form_error">{{ errorMessage }}</p>
-      <button class="register-form_button" @click="register">Sign up</button>
-      <p class="register-form_infoText">Already have an account? <router-link to="/clever-to-do-list/login" class="register-form_link">Sing in</router-link></p>
+      <p v-if="errorMessage" class="auth-form__error">{{ errorMessage }}</p>
+      <button class="register-form__button" @click="register">Sign up</button>
+      <p class="register-form__infoText">
+        Already have an account?
+        <router-link to="/login" class="register-form__link"
+          >Sing in</router-link
+        >
+      </p>
     </div>
   </div>
 </template>
 
 <style scoped>
-.container{
+.container {
   padding: 20px 30px;
 }
 
@@ -89,23 +109,24 @@ h1 {
   color: var(--black);
 }
 
-.auth-form_error{
-  color:var(--red);
+.auth-form__error {
+  color: var(--red);
   font-weight: bold;
 }
 
-.register-form_email, .register-form_password {
+.register-form__email,
+.register-form__password {
   margin-bottom: 20px;
 }
 
-.register-form_nameOfInput {
+.register-form__nameOfInput {
   font-size: 16px;
   margin-bottom: 5px;
   font-weight: bold;
   color: var(--black);
 }
 
-.register-form_input {
+.register-form__input {
   font-size: 18px;
   border: 1px solid #ccc;
   border-radius: 10px;
@@ -115,13 +136,12 @@ h1 {
   transition: border-color 0.3s ease;
 }
 
-.register-form_input:focus {
+.register-form__input:focus {
   border: 2px solid var(--primary);
   outline: var(--primary);
-
 }
 
-.register-form_button {
+.register-form__button {
   position: absolute;
   left: 0;
   right: 0;
@@ -139,21 +159,21 @@ h1 {
   transition: background-color 0.3s ease;
 }
 
-.register-form_button:hover {
+.register-form__button:hover {
   background-color: var(--secondary);
 }
 
-.register-form_infoText {
+.register-form__infoText {
   text-align: center;
   margin-top: 50px;
   color: var(--black);
 }
 
-.register-form_link{
+.register-form__link {
   color: var(--primary);
   text-decoration: none;
 }
-.register-form_link:hover {
+.register-form__link:hover {
   color: var(--secondary);
   text-decoration: underline;
 }
