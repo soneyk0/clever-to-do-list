@@ -42,15 +42,15 @@ router.beforeEach(async (to) => {
     })
   })
   let canAccess
-  if (to.path !== '/login' && to.path !== '/signup') {
+  if (!to.path.includes('login') && !to.path.includes('signup')) {
     canAccess = isAuth
-  } else if (to.path === '/login' || to.path === '/signup') {
+  } else if (to.path.includes('login') || to.path.includes('signup')) {
     canAccess = !isAuth
   } else {
     canAccess = true
   }
   if (!canAccess) {
-    return isAuth ? '/' : '/login'
+    return isAuth ? '/clever-to-do-list' : '/clever-to-do-list/login'
   }
 })
 
