@@ -129,7 +129,7 @@ const previousPage = () => {
 </script>
 
 <template>
-  <div class="container">
+  <form class="container" @submit.prevent="submit">
     <div class="task-form__header">
       <button class="header__back-page-button">
         <img
@@ -173,10 +173,10 @@ const previousPage = () => {
         class="task-form__date"
       />
     </div>
-    <button class="task-form__button" @click="submit">
+    <button class="task-form__button">
       {{ taskId ? 'Save' : 'Add task' }}
     </button>
-  </div>
+  </form>
 </template>
 
 <style scoped>

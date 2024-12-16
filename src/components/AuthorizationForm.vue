@@ -38,7 +38,7 @@ function signIn() {
 
 <template>
   <div class="container">
-    <div class="auth-form">
+    <form class="auth-form" @submit.prevent="signIn">
       <h1>Sign in</h1>
       <div class="auth-form__email">
         <p class="auth-form__nameOfInput">Email</p>
@@ -59,14 +59,14 @@ function signIn() {
         />
       </div>
       <p v-if="errorMessage" class="auth-form__error">{{ errorMessage }}</p>
-      <button class="auth-form__button" @click="signIn">Sign in</button>
+      <button type="submit" class="auth-form__button">Sign in</button>
       <p class="auth-form_infoText">
         Don't have an account?
         <router-link to="/clever-to-do-list/signup" class="auth-form__link"
           >Sing up</router-link
         >
       </p>
-    </div>
+    </form>
   </div>
 </template>
 

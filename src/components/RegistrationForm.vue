@@ -55,7 +55,7 @@ function register() {
 
 <template>
   <div class="container">
-    <div class="register-form">
+    <form class="register-form" @submit.prevent="register">
       <h1>Sign up</h1>
       <div class="register-form__email">
         <p class="register-form__nameOfInput">Email</p>
@@ -85,14 +85,14 @@ function register() {
         />
       </div>
       <p v-if="errorMessage" class="auth-form__error">{{ errorMessage }}</p>
-      <button class="register-form__button" @click="register">Sign up</button>
+      <button type="submit" class="register-form__button">Sign up</button>
       <p class="register-form__infoText">
         Already have an account?
         <router-link to="/clever-to-do-list/login" class="register-form__link"
           >Sing in</router-link
         >
       </p>
-    </div>
+    </form>
   </div>
 </template>
 
