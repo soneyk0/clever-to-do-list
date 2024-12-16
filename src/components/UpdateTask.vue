@@ -10,6 +10,7 @@ import { toast } from 'vue3-toastify'
 const auth = getAuth()
 const user = auth.currentUser
 const errorMessage = ref('')
+const currentDate = `${new Date().getFullYear()}-${new Date().getMonth() + 1}-${new Date().getDate()}`
 
 const route = useRoute()
 let taskId = ''
@@ -38,40 +39,73 @@ const getCurrentTask = async () => {
 
 const updateTask = async () => {
   await updateDoc(doc(db, 'todos', taskId), task)
-  router.push('/clever-to-do-list')
-  toast.success('Task was successfully updated.', {
-    autoClose: 3000,
-    position: 'bottom-left',
-    type: 'success',
-    theme: 'colored',
-  })
+  if (task.title && task.description && task.date >= currentDate) {
+    router.push('/clever-to-do-list')
+    toast.success('Task was successfully updated.', {
+      autoClose: 3000,
+      position: 'bottom-left',
+      type: 'success',
+      theme: 'colored',
+    })
+  } else if (
+    task.title === '' ||
+    task.description === '' ||
+    task.date === null
+  ) {
+    toast.error('All fields must be filled in', {
+      autoClose: 3000,
+      position: 'bottom-left',
+      type: 'error',
+      theme: 'colored',
+    })
+  } else if (task.date < currentDate) {
+    toast.error('Date selected incorrectly', {
+      autoClose: 3000,
+      position: 'bottom-left',
+      type: 'error',
+      theme: 'colored',
+    })
+  }
 }
 
 const createTask = async () => {
-  if (task.title && task.description && task.date) {
-    try {
-      await addDoc(collection(db, 'todos'), {
-        title: task.title,
-        description: task.description,
-        date: task.date,
-        done: task.done,
-        email: user.email,
-      })
-      toast.success('Task was successfully created.', {
-        autoClose: 3000,
-        position: 'bottom-left',
-        type: 'success',
-        theme: 'colored',
-      })
-      router.push('/clever-to-do-list')
-    } catch {
-      toast.error('An unexpected error occurred.', {
-        autoClose: 3000,
-        position: 'bottom-left',
-        type: 'error',
-        theme: 'colored',
-      })
-    }
+  if (
+    task.title !== '' &&
+    task.description !== '' &&
+    task.date >= currentDate
+  ) {
+    await addDoc(collection(db, 'todos'), {
+      title: task.title,
+      description: task.description,
+      date: task.date,
+      done: task.done,
+      email: user.email,
+    })
+    router.push('/clever-to-do-list')
+    toast.success('Task was successfully created.', {
+      autoClose: 3000,
+      position: 'bottom-left',
+      type: 'success',
+      theme: 'colored',
+    })
+  } else if (
+    task.title === '' ||
+    task.description === '' ||
+    task.date === null
+  ) {
+    toast.error('All fields must be filled in', {
+      autoClose: 3000,
+      position: 'bottom-left',
+      type: 'error',
+      theme: 'colored',
+    })
+  } else if (task.date < currentDate) {
+    toast.error('Date selected incorrectly', {
+      autoClose: 3000,
+      position: 'bottom-left',
+      type: 'error',
+      theme: 'colored',
+    })
   }
 }
 
@@ -167,6 +201,7 @@ const previousPage = () => {
   border: none;
   background: var(--white);
 }
+
 .back-page__icon {
   width: 30px;
   height: 30px;
@@ -182,7 +217,6 @@ h1 {
 .task-form__title,
 .task-form__description,
 .task-form__calendar {
-  font-size: 16px;
   margin-bottom: 20px;
   font-weight: bold;
   color: var(--black);
