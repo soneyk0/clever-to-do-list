@@ -4,7 +4,6 @@ import { ref } from 'vue'
 import router from '../appRoutes/router.js'
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
-import { errorCodes } from '../../constants.js'
 
 const email = ref('')
 const password = ref('')
@@ -16,22 +15,13 @@ function signIn() {
     .then(() => {
       router.push('/clever-to-do-list')
     })
-    .catch((error) => {
-      if (errorCodes.includes(error.code)) {
-        toast.error('Incorrect email or password.', {
-          autoClose: 3000,
-          position: 'bottom-left',
-          type: 'error',
-          theme: 'colored',
-        })
-      } else {
-        toast.error('An unexpected error occurred.', {
-          autoClose: 3000,
-          position: 'bottom-left',
-          type: 'error',
-          theme: 'colored',
-        })
-      }
+    .catch(() => {
+      toast.error('Incorrect email or password', {
+        autoClose: 3000,
+        position: 'bottom-left',
+        type: 'error',
+        theme: 'colored',
+      })
     })
 }
 </script>
