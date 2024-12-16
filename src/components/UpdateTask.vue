@@ -97,12 +97,14 @@ const previousPage = () => {
 <template>
   <div class="container">
     <div class="task-form__header">
-      <img
-        src="../assets/back.svg"
-        alt="Back"
-        @click="previousPage"
-        class="back-page__button"
-      />
+      <button class="header__back-page-button">
+        <img
+          src="../assets/back.svg"
+          alt="Back"
+          @click="previousPage"
+          class="back-page__icon"
+        />
+      </button>
       <h1>{{ taskId ? 'Edit' : 'Create' }} task</h1>
     </div>
     <div class="task-form__title">
@@ -159,7 +161,13 @@ const previousPage = () => {
   align-items: center;
   margin-bottom: 50px;
 }
-.back-page__button {
+
+.header__back-page-button {
+  outline: none;
+  border: none;
+  background: var(--white);
+}
+.back-page__icon {
   width: 30px;
   height: 30px;
   cursor: pointer;

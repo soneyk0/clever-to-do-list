@@ -4,6 +4,7 @@ import { ref } from 'vue'
 import router from '../appRoutes/router.js'
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
+import { errorCodes } from '../../constants.js'
 
 const email = ref('')
 const password = ref('')
@@ -16,10 +17,7 @@ function signIn() {
       router.push('/clever-to-do-list')
     })
     .catch((error) => {
-      if (
-        error.code === 'auth/wrong-password' ||
-        error.code === 'auth/user-not-found'
-      ) {
+      if (errorCodes.includes(error.code)) {
         toast.error('Incorrect email or password.', {
           autoClose: 3000,
           position: 'bottom-left',

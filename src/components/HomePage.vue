@@ -128,18 +128,24 @@ const loginOut = () => {
               <span>{{ todo.title }}</span>
             </label>
             <div class="task-list__options-button">
-              <img
-                src="../assets/delete.svg"
-                alt="Delete"
-                @click="deleteTodo(todo.id)"
-                class="task-list__delete-button"
-              />
-              <img
-                src="../assets/edit.svg"
-                alt="Edit"
-                @click="router.push(`/clever-to-do-list/edit-task/${todo.id}`)"
-                class="task-list__edit-button"
-              />
+              <button class="task-list__delete-button">
+                <img
+                  src="../assets/delete.svg"
+                  alt="Delete"
+                  @click="deleteTodo(todo.id)"
+                  class="task-list__delete-icon"
+                />
+              </button>
+              <button class="task-list__edit-button">
+                <img
+                  src="../assets/edit.svg"
+                  alt="Edit"
+                  @click="
+                    router.push(`/clever-to-do-list/edit-task/${todo.id}`)
+                  "
+                  class="task-list__edit-icon"
+                />
+              </button>
             </div>
           </div>
           <hr v-if="index < todos.length" />
@@ -268,10 +274,19 @@ img {
   display: flex;
   flex-direction: row;
   gap: 20px;
+  border: none;
+  outline: none;
 }
 
 .task-list__delete-button,
 .task-list__edit-button {
+  border: none;
+  outline: none;
+  background: var(--white);
+}
+
+.task-list__delete-icon,
+.task-list__edit-icon {
   width: 20px;
   height: 20px;
   cursor: pointer;
