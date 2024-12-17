@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 
 // eslint-disable-next-line no-unused-vars
 const props = defineProps({
@@ -7,10 +7,12 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['select-date'])
-const currentDate = new Date()
-const currentMonth = ref(currentDate.getMonth())
-const currentYear = ref(currentDate.getFullYear())
+const today = new Date()
+const currentDate = ref(new Date())
 const selectedDate = ref('')
+const target = ref(null)
+const calendar = ref(null)
+
 const monthNames = [
   'Jan',
   'Feb',
@@ -27,63 +29,104 @@ const monthNames = [
 ]
 const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
-const generateCalendar = () =>
-  computed(() => {
-    const days = []
-    for (let i = 0; i < 31; i++) {
-      const newDate = new Date(
-        currentYear.value,
-        currentMonth.value,
-        currentDate.getDate() + i,
-      )
-      const currentMonthName = computed(() => monthNames[newDate.getMonth()])
-      const getDayOfWeek = computed(
-        () => daysOfWeek[newDate.getDay() === 0 ? 6 : newDate.getDay() - 1],
-      )
+const getDaysInMonth = (month, year) => new Date(year, month + 1, 0).getDate()
 
-      const isToday =
-        newDate.getDate() === currentDate.getDate() &&
-        newDate.getMonth() === currentDate.getMonth() &&
-        newDate.getFullYear() === currentDate.getFullYear()
+let generateDateCount = 0
 
-      const monthIndex = monthNames.indexOf(currentMonthName.value)
-      const formattedMonth = (monthIndex + 1).toString().padStart(2, '0')
-      const formattedDay = newDate.getDate().toString().padStart(2, '0')
+const generateCalendar = () => {
+  const days = []
+  const currentMonth = currentDate.value.getMonth()
+  const currentYear = currentDate.value.getFullYear()
+  const startDay = currentDate.value.getDate()
+  const daysInMonth = getDaysInMonth(currentMonth, currentYear)
 
-      days.push({
-        date: newDate.getDate(),
-        dayOfWeek: getDayOfWeek,
-        month: currentMonthName,
-        year: newDate.getFullYear(),
-        isToday: isToday,
-        formattedDate: `${newDate.getFullYear()}-${formattedMonth}-${formattedDay}`,
-      })
-    }
-    return days
-  })
+  for (let i = startDay; i <= daysInMonth; i++) {
+    const newDate = new Date(currentYear, currentMonth, i)
 
-const calendarDays = generateCalendar()
+    const isToday =
+      newDate.getDate() === today.getDate() &&
+      newDate.getMonth() === today.getMonth() &&
+      newDate.getFullYear() === today.getFullYear()
+
+    const formattedMonth = (currentMonth + 1).toString().padStart(2, '0')
+    const formattedDay = i.toString().padStart(2, '0')
+
+    days.push({
+      date: i,
+      dayOfWeek: daysOfWeek[newDate.getDay() === 0 ? 6 : newDate.getDay() - 1],
+      month: monthNames[currentMonth],
+      year: currentYear,
+      isToday: isToday,
+      formattedDate: `${currentYear}-${formattedMonth}-${formattedDay}`,
+    })
+  }
+  return days
+}
+
+const calendarDays = reactive({
+  days: generateCalendar(today),
+})
 
 const selectDate = (date) => {
   selectedDate.value = date.formattedDate
   emit('select-date', selectedDate.value)
 }
 
+const loadNextMonth = () => {
+  let nextMonth = currentDate.value.getMonth() + 1
+  let nextYear = currentDate.value.getFullYear()
+
+  if (nextMonth > 11) {
+    nextMonth = 0
+    nextYear += 1
+  }
+  currentDate.value = new Date(nextYear, nextMonth, 1)
+  const newDays = generateCalendar()
+  calendarDays.days.push(...newDays)
+}
+
 onMounted(() => {
-  selectDate(calendarDays.value[0])
+  selectDate(calendarDays.days[0])
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          loadNextMonth()
+          observer.unobserve(entry.target)
+          observeLastDay()
+        }
+      })
+    },
+    { root: calendar.value },
+  )
+
+  const observeLastDay = () => {
+    const lastDayElement = document.querySelector('.calendar__item:last-child')
+    if (lastDayElement) observer.observe(lastDayElement)
+  }
+
+  observeLastDay()
 })
 </script>
 
 <template>
   <div class="container__calendar">
     <div class="calendar__year">
-      {{ currentYear }}
+      {{ currentDate.getFullYear() }}
     </div>
-    <div class="calendar">
+    <div class="calendar" ref="calendar">
       <button
-        v-for="date in calendarDays"
-        :key="date.date"
+        v-for="(date, index) in calendarDays.days"
+        :key="generateDateCount.toString() + date.formattedDate + index"
         class="calendar__item"
+        :ref="
+          (el) => {
+            if (index === calendarDays.days.length - 1) {
+              target = el
+            }
+          }
+        "
         @click="() => selectDate(date)"
         :class="{
           today: date?.isToday,
